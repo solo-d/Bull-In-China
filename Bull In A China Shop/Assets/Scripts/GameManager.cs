@@ -11,6 +11,11 @@ public enum GameState //works like objects and passed in as parameters
 
 public class GameManager : MonoBehaviour
 {
+
+    //set score to be int 100000
+
+    //update score per round. maybe in the Update function?
+
     public static GameManager instance;
 
     void Awake() //used to access GM from anywhere in the code
@@ -36,6 +41,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         SetGameState(GameState.gameOver);
+        //
     }
 
     //when player goes to the menu?

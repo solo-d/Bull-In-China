@@ -20,9 +20,8 @@ public class WallShelf1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //for each object, put into an array. Not sure seperate or a big array
-        //9 Objects  
-        //On collision, choose a 1 to 4 (inclusive). The result will determine how many objects will be chosen to be broken
+        //for each object, put into an array. Not sure seperate or a big array  
+        //On collision, take n = (array.length/2) - 1 then choose between 1 - n (inclusive) and The result will determine how many objects will be chosen to be broken
         //then once selected, choose a number either 1 to 2 (inclusive) (so boolean here) and apply to each object.
         //if 1 then break object, remove from array, subtract from score, destroy object when new round starts
         //else remain intact (so do nothing) 
