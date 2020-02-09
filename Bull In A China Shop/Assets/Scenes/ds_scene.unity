@@ -512,7 +512,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+<<<<<<< HEAD
     - target: {fileID: 3945312007432749991, guid: b29454ebe7006457c9907f7fd025580f,
+=======
+    - target: {fileID: 1936529307314730008, guid: 973ef436237f24edbb60f5f1434fc580,
+        type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277736664298347222, guid: 973ef436237f24edbb60f5f1434fc580,
+        type: 3}
+      propertyPath: m_TagString
+      value: Door
+      objectReference: {fileID: 0}
+    - target: {fileID: 4349707902411313972, guid: 973ef436237f24edbb60f5f1434fc580,
+        type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 6418574494776168696, guid: 973ef436237f24edbb60f5f1434fc580,
+>>>>>>> develop
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.3400002
@@ -7572,7 +7591,11 @@ PrefabInstance:
     - target: {fileID: 6351478754874197678, guid: 094867528732e409ba891ce5f12888d9,
         type: 3}
       propertyPath: m_LocalPosition.x
+<<<<<<< HEAD
       value: 6.282771
+=======
+      value: 14.39
+>>>>>>> develop
       objectReference: {fileID: 0}
     - target: {fileID: 6351478754874197678, guid: 094867528732e409ba891ce5f12888d9,
         type: 3}
@@ -7582,7 +7605,11 @@ PrefabInstance:
     - target: {fileID: 6351478754874197678, guid: 094867528732e409ba891ce5f12888d9,
         type: 3}
       propertyPath: m_LocalPosition.z
+<<<<<<< HEAD
       value: 6.0163145
+=======
+      value: 1.55
+>>>>>>> develop
       objectReference: {fileID: 0}
     - target: {fileID: 6351478754874197678, guid: 094867528732e409ba891ce5f12888d9,
         type: 3}
@@ -7766,8 +7793,13 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6351478755579207444}
   m_Material: {fileID: 0}
+<<<<<<< HEAD
   m_IsTrigger: 0
   m_Enabled: 1
+=======
+  m_IsTrigger: 1
+  m_Enabled: 0
+>>>>>>> develop
   serializedVersion: 2
   m_Size: {x: 0.02469872, y: 0.024135297, z: 0.025346447}
   m_Center: {x: 0.012593519, y: 0.0041024922, z: 0.00074082316}
