@@ -115,7 +115,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 169155ecf8b77430dbe7e881b89dd10a,
         type: 3}
       propertyPath: m_Name
-      value: Bowl
+      value: Bowl4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 169155ecf8b77430dbe7e881b89dd10a, type: 3}
@@ -205,7 +205,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 169155ecf8b77430dbe7e881b89dd10a,
         type: 3}
       propertyPath: m_Name
-      value: Bowl (3)
+      value: Bowl3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 169155ecf8b77430dbe7e881b89dd10a, type: 3}
@@ -370,7 +370,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 169155ecf8b77430dbe7e881b89dd10a,
         type: 3}
       propertyPath: m_Name
-      value: Bowl (2)
+      value: Bowl2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 169155ecf8b77430dbe7e881b89dd10a, type: 3}
@@ -460,7 +460,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 169155ecf8b77430dbe7e881b89dd10a,
         type: 3}
       propertyPath: m_Name
-      value: Bowl (1)
+      value: Bowl1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 169155ecf8b77430dbe7e881b89dd10a, type: 3}
