@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public partial class BullScript : MonoBehaviour
 {
-    private Vector3 startPosition = new Vector3(8.74f, 0.69f, 1.55f);
+    private Vector3 startPosition = new Vector3(8.74f, 0.69f, 3.46f);
 
     private IEnumerator bullMovement_coroutine;
 
@@ -23,12 +23,18 @@ public partial class BullScript : MonoBehaviour
         
         if (collidedWith.tag == "Floor") return;
         if (collidedWith.tag == "Wall")
-        {            
-            BullStop();
-            ChangeRotation("");
+        {
+            Debug.Log("Collided with Wall.");
 
+            BullStop();
         };
-        if (collidedWith.tag == "Shelf") return;
+        if (collidedWith.tag == "Shelf")
+        {
+            Debug.Log("Collided with shelf.");
+            StopCoroutine(bullMovement_coroutine);
+
+            ChangeRotation("");
+        };
         if (collidedWith.tag == "Trap") return;
     }
     
@@ -66,16 +72,18 @@ public partial class BullScript : MonoBehaviour
         // The bull should be able travel from one end of the map to teh other in 30 seconds
         Vector3 levelSize = GameObject.Find("Terrain").GetComponent<Terrain>().terrainData.size;
         float playingField = (levelSize.x * levelSize.z);
-        moveSpeed = (playingField) / 30;
+        moveSpeed = (playingField) / 60;
+        WaitSeconds(3.0f);
         BullRun();
         ToggleDoors(false);
     }
 
     private void ToggleDoors(bool showDoors) 
     {
-        GameObject doors = GameObject.FindWithTag("Door");
-        doors.SetActive(showDoors);
+        //GameObject doors = GameObject.FindWithTag("Door");
+        //doors.SetActive(showDoors);
     }
+
     public void BullRun()
     {
         bullMovement_coroutine = MoveBull();
@@ -89,6 +97,9 @@ public partial class BullScript : MonoBehaviour
         this.dazed = true;
         animator.SetBool("Collided", true);
         animator.SetBool("Reset", false);
+        ChangeRotation("");
+        WaitSeconds(10.0f);
+
     }
 
     public void WakeBull()
@@ -100,13 +111,8 @@ public partial class BullScript : MonoBehaviour
     }
 
     public void Seek(float deltaTime)
-    {
+    {      
         this.transform.Rotate(Vector3.up, rotationSpeed*deltaTime);
-        if (false)
-        {
-            var animator = GetComponent<Animator>();
-            animator.SetBool("Reset", true);
-        }
     }
 
     /// <summary>
@@ -120,10 +126,11 @@ public partial class BullScript : MonoBehaviour
 	public void ChangeStamina(int changeStaminaBy) { }
 
 	public void ChangeRotation(string turnDirection) {
-        for (int i = Random.Range(0, 10); i > 0; i--)
+        for (int i = Random.Range(0, 45); i > 0; i--)
         {
             this.Seek(0.1f);
         }
+
         this.seeking = false;
         var animator = GetComponent<Animator>();
         animator.SetBool("Reset", true);
@@ -133,11 +140,18 @@ public partial class BullScript : MonoBehaviour
 
 
     //This is a coroutine that moves the bull
+    IEnumerator WaitSeconds(float timeToWait)
+    {
+        Debug.Log("Wait " + timeToWait + " seconds.");
+        yield return new WaitForSeconds(timeToWait);        
+    }
+
+    //This is a coroutine that moves the bull
     IEnumerator MoveBull()
     {
         for (; ; )
         {
-            Move(Time.deltaTime);
+            Move(0.1f);
             this.transform.rotation = new Quaternion(0, this.transform.rotation.y, 0, this.transform.rotation.w);
             yield return new WaitForSeconds(.1f);
         }
@@ -145,6 +159,6 @@ public partial class BullScript : MonoBehaviour
 
     void Move(float timeDelta)
 	{
-        transform.Translate(this.transform.forward*moveSpeed*timeDelta);
+        transform.Translate(this.transform.forward*moveSpeed*timeDelta, Camera.main.transform);
     }
 }

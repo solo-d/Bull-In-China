@@ -20,7 +20,7 @@ public class TitleMenuHandler : MonoBehaviour
 
     public void ProgressToGameplay()
     {
-        Debug.Log("BUTTON PRESSED SUCCESSFULLY");
-        SceneManager.LoadScene(nextScene.name);
+        //Debug.Log("BUTTON PRESSED SUCCESSFULLY, Begin Game");
+        SceneManager.LoadScene("ds_scene");
     }
 }
