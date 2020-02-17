@@ -5,20 +5,22 @@ using UnityEngine.UI;
 
 public class CountDownTimer : MonoBehaviour
 {
-    float CurrentTime = 0f;
-    float StartingTime = 120f;
-    [SerializeField] Text CountDownText;
-
+    public Text time;
+    public int total_time = 120;
+    // Start is called before the first frame update
     void Start()
-    { CurrentTime = StartingTime; }
-
-    void Update()
     {
-        CurrentTime -= 1 * Time.deltaTime;
+        StartCoroutine(CountDown());
+    }
 
-        CountDownText.text = CurrentTime.ToString("0");
-        if (CurrentTime <= 0)
-        { CurrentTime = 0; }
-        if (CurrentTime <=9.5) { CountDownText.color = Color.red; }
+    IEnumerator CountDown()
+    {
+        while (total_time >= 0)
+        {
+            time.GetComponent<Text>().text = "Time:" + total_time.ToString();
+            yield return new WaitForSeconds(1);
+            total_time--;
+        }
+        GameManager.Instance.LoadTheNextScene();
     }
 }
