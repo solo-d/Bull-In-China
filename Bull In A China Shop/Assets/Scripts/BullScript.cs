@@ -73,8 +73,7 @@ public partial class BullScript : MonoBehaviour
         Vector3 levelSize = GameObject.Find("Terrain").GetComponent<Terrain>().terrainData.size;
         float playingField = (levelSize.x * levelSize.z);
         moveSpeed = (playingField) / 60;
-        WaitSeconds(3.0f);
-        BullRun();
+        BullRun(3.0f);
         ToggleDoors(false);
     }
 
@@ -84,9 +83,10 @@ public partial class BullScript : MonoBehaviour
         //doors.SetActive(showDoors);
     }
 
-    public void BullRun()
+    public void BullRun(float timeDelay = 0.0f)
     {
-        bullMovement_coroutine = MoveBull();
+        Debug.Log("Start Bull Run.");
+        bullMovement_coroutine = MoveBull(timeDelay);
         StartCoroutine(bullMovement_coroutine);
     }
 
@@ -98,7 +98,7 @@ public partial class BullScript : MonoBehaviour
         animator.SetBool("Collided", true);
         animator.SetBool("Reset", false);
         ChangeRotation("");
-        WaitSeconds(10.0f);
+        StartCoroutine(WaitSeconds(2.0f));
 
     }
 
@@ -133,9 +133,12 @@ public partial class BullScript : MonoBehaviour
 
         this.seeking = false;
         var animator = GetComponent<Animator>();
-        animator.SetBool("Reset", true);
 
-        BullRun();
+        BullRun(2.0f);
+        this.dazed = false;
+
+        animator.SetBool("Reset", true);
+        animator.SetBool("Collided", false);
     }
 
 
@@ -147,13 +150,19 @@ public partial class BullScript : MonoBehaviour
     }
 
     //This is a coroutine that moves the bull
-    IEnumerator MoveBull()
+    IEnumerator MoveBull(float initialWait)
     {
+        Debug.Log("Start Wait() function. The time is: " + Time.time);
+        Debug.Log("Float duration = " + initialWait);
+            
+            yield return new WaitForSeconds(initialWait);
+        Debug.Log("End Wait() function and the time is: " + Time.time);
+        Debug.Log("Start Moving now");
         for (; ; )
         {
+            yield return new WaitForSeconds(.1f);
             Move(0.1f);
             this.transform.rotation = new Quaternion(0, this.transform.rotation.y, 0, this.transform.rotation.w);
-            yield return new WaitForSeconds(.1f);
         }
     }
 
