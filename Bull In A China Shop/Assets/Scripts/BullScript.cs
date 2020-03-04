@@ -15,7 +15,9 @@ public partial class BullScript : MonoBehaviour
     private bool seeking;
 
     private Quaternion newTargetAngle;
-    
+
+    private Animator animator;
+
     void OnCollisionEnter(Collision collision)
     {
 
@@ -63,6 +65,9 @@ public partial class BullScript : MonoBehaviour
     // Whatever starts the level should call 
     public void BullInit()
     {
+        animator = GetComponent<Animator>();
+        animator.enabled = false;
+
         ToggleDoors(true);
 
         // We want the bull to start at the doorway
@@ -92,13 +97,13 @@ public partial class BullScript : MonoBehaviour
 
     public void BullStop()
     {
+        animator.enabled = false;
         StopCoroutine(bullMovement_coroutine);
-        var animator = GetComponent<Animator>();
         this.dazed = true;
         animator.SetBool("Collided", true);
         animator.SetBool("Reset", false);
         ChangeRotation("");
-        StartCoroutine(WaitSeconds(2.0f));
+        StartCoroutine(WaitSeconds(1.0f));
 
     }
 
@@ -156,6 +161,8 @@ public partial class BullScript : MonoBehaviour
         Debug.Log("Float duration = " + initialWait);
             
             yield return new WaitForSeconds(initialWait);
+        animator.enabled = true;
+
         Debug.Log("End Wait() function and the time is: " + Time.time);
         Debug.Log("Start Moving now");
         for (; ; )
