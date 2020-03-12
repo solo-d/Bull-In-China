@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public partial class BullScript : MonoBehaviour
 {
-    private Vector3 startPosition = new Vector3(8.74f, 0.69f, 3.46f);
+    private Vector3 startPosition = new Vector3(8.74f, 1f, 3.46f);
 
     private IEnumerator bullMovement_coroutine;
 
@@ -18,6 +18,11 @@ public partial class BullScript : MonoBehaviour
 
     private Animator animator;
 
+    // This is the bull initial direction after entering the shop.
+    public float horizontalDir, verticalDir;
+    
+    Vector3 forward, right;    // Keeps track of our relative forward and right vectors
+
     void OnCollisionEnter(Collision collision)
     {
 
@@ -26,13 +31,13 @@ public partial class BullScript : MonoBehaviour
         if (collidedWith.tag == "Floor") return;
         if (collidedWith.tag == "Wall")
         {
-            Debug.Log("Collided with Wall.");
+            //Debug.Log("Collided with Wall.");
 
             BullStop();
         };
         if (collidedWith.tag == "Shelf")
         {
-            Debug.Log("Collided with shelf.");
+            //Debug.Log("Collided with shelf.");
             StopCoroutine(bullMovement_coroutine);
 
             ChangeRotation("");
@@ -65,6 +70,15 @@ public partial class BullScript : MonoBehaviour
     // Whatever starts the level should call 
     public void BullInit()
     {
+        forward = Camera.main.transform.forward; // Set forward to equal the camera's forward vector
+        forward.y = 0; // make sure y is 0
+        forward = Vector3.Normalize(forward); // make sure the length of vector is set to a max of 1.0
+        right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward; // set the right-facing vector to be facing right relative to the camera's forward vector   
+
+
+        horizontalDir = -0.3f;
+        verticalDir = 0.3f;
+
         animator = GetComponent<Animator>();
         animator.enabled = false;
 
@@ -72,6 +86,7 @@ public partial class BullScript : MonoBehaviour
 
         // We want the bull to start at the doorway
         this.transform.position = startPosition;
+        this.transform.rotation = Quaternion.Euler(0, 0, 0);
 
         // We will calculate the bull running speedy based on the size of the man divided by 30 seconds. 
         // The bull should be able travel from one end of the map to teh other in 30 seconds
@@ -116,8 +131,11 @@ public partial class BullScript : MonoBehaviour
     }
 
     public void Seek(float deltaTime)
-    {      
-        this.transform.Rotate(Vector3.up, rotationSpeed*deltaTime);
+    {
+        // this.transform.Rotate(0f, 1f* rotationSpeed, 0f, Space.World);
+
+        this.transform.Rotate(Vector3.up, rotationSpeed * deltaTime);
+        //*rotationSpeed*deltaTime
     }
 
     /// <summary>
@@ -131,10 +149,45 @@ public partial class BullScript : MonoBehaviour
 	public void ChangeStamina(int changeStaminaBy) { }
 
 	public void ChangeRotation(string turnDirection) {
-        for (int i = Random.Range(0, 45); i > 0; i--)
+        //int i = 35;// Random.Range(0, 45);
+        //Debug.Log("Rotate " + i + " degrees in the Y direction.");
+        //for (; i > 0;i--)
+        //{
+        //    this.Seek(0.1f);            
+        //}
+        //switch (turnDirection.ToLower())
+        switch("right_45")
         {
-            this.Seek(0.1f);
-        }
+            case "left_45":
+                horizontalDir = -0.3f;
+                verticalDir = 0f;
+                break;
+            case "left_90":
+                horizontalDir = -0.3f;
+                verticalDir = -0.3f;
+                Move(0.1f);
+                break;
+            case "left_135":
+                horizontalDir = 0f;
+                verticalDir = -0.3f;
+                break;
+            case "right_45":
+                horizontalDir = 0f;
+                verticalDir = 0.3f;
+                break;
+            case "right_90":
+                horizontalDir = 0.3f;
+                verticalDir = 0.3f;
+                break;
+            case "right_135":
+                horizontalDir = 0.3f;
+                verticalDir = 0f;
+                break;
+            case "reverse":
+                horizontalDir = 0.3f;
+                verticalDir = -0.3f;
+                break;
+        };
 
         this.seeking = false;
         var animator = GetComponent<Animator>();
@@ -157,24 +210,31 @@ public partial class BullScript : MonoBehaviour
     //This is a coroutine that moves the bull
     IEnumerator MoveBull(float initialWait)
     {
-        Debug.Log("Start Wait() function. The time is: " + Time.time);
-        Debug.Log("Float duration = " + initialWait);
+        //Debug.Log("Start Wait() function. The time is: " + Time.time);
+        //Debug.Log("Float duration = " + initialWait);
             
             yield return new WaitForSeconds(initialWait);
         animator.enabled = true;
 
-        Debug.Log("End Wait() function and the time is: " + Time.time);
-        Debug.Log("Start Moving now");
+        //Debug.Log("End Wait() function and the time is: " + Time.time);
+        //Debug.Log("Start Moving now");
         for (; ; )
         {
             yield return new WaitForSeconds(.1f);
-            Move(0.1f);
-            this.transform.rotation = new Quaternion(0, this.transform.rotation.y, 0, this.transform.rotation.w);
+            Move(0.1f);            
         }
     }
 
     void Move(float timeDelta)
 	{
-        transform.Translate(this.transform.forward*moveSpeed*timeDelta, Camera.main.transform);
+        //transform.Translate(this.transform.forward*moveSpeed*timeDelta, Camera.main.transform);
+
+        Vector3 direction = new Vector3(horizontalDir, 0, verticalDir); // setup a direction Vector based on keyboard input. GetAxis returns a value between -1.0 and 1.0. If the A key is pressed, GetAxis(HorizontalKey) will return -1.0. If D is pressed, it will return 1.0
+        Vector3 rightMovement = right * moveSpeed * Time.deltaTime * horizontalDir; // Our right movement is based on the right vector, movement speed, and our GetAxis command. We multiply by Time.deltaTime to make the movement smooth.
+        Vector3 upMovement = forward * moveSpeed * Time.deltaTime * verticalDir; // Up movement uses the forward vector, movement speed, and the vertical axis inputs.
+        Vector3 heading = Vector3.Normalize(rightMovement + upMovement); // This creates our new direction. By combining our right and forward movements and normalizing them, we create a new vector that points in the appropriate direction with a length no greater than 1.0
+        transform.forward = heading; // Sets forward direction of our game object to whatever direction we're moving in
+        transform.position += rightMovement; // move our transform's position right/left
+        transform.position += upMovement; // Move our transform's position up/down
     }
 }
