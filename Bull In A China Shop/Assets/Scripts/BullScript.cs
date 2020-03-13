@@ -32,6 +32,7 @@ public partial class BullScript : MonoBehaviour
         if (collidedWith.tag == "Wall")
         {
             //Debug.Log("Collided with Wall.");
+            ChangeRotation("");
 
             BullStop();
         };
@@ -156,7 +157,11 @@ public partial class BullScript : MonoBehaviour
         //    this.Seek(0.1f);            
         //}
         //switch (turnDirection.ToLower())
-        switch("right_45")
+        float ranHor = Random.Range(-1.0f, 1.0f);
+        float ranVer = Random.Range(-1.0f, 1.0f);
+
+
+        switch ("right_45")
         {
             case "left_45":
                 horizontalDir = -0.3f;
@@ -172,8 +177,9 @@ public partial class BullScript : MonoBehaviour
                 verticalDir = -0.3f;
                 break;
             case "right_45":
-                horizontalDir = 0f;
-                verticalDir = 0.3f;
+                Debug.Log("Horizontal:"+ranHor+", Vertical:"+ ranVer);
+                horizontalDir = ranHor;
+                verticalDir = ranVer;
                 break;
             case "right_90":
                 horizontalDir = 0.3f;
