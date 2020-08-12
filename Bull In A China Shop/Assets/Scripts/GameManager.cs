@@ -1,70 +1,111 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Linq;
 using UnityEngine;
-
-public enum GameState //works like objects and passed in as parameters
-{
-    menu, //
-    inGame,
-    gameOver
-}
+using UnityEngine.SceneManagement;
+//using Wilberforce;
+//using UnityEngine.UI;
+using UnityEngine.UIElements;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
+    public bool sceneLoad;
+    public static bool sceneReloaded;
+    public GameObject timer;
+    //public bool checkTimer;
+    public GameObject timeButOn;
+    public GameObject timeButOff;
+    public GameObject difficulty;
+    public GameObject tapHold;
+    public bool tapControl;
+    public GameObject vibration;
+    public bool vibControl;
+    public GameObject vibButOn;
+    public GameObject vibButOff;
+    public GameObject Sound;
+    public bool soundControl;
+    public GameObject soundButOn;
+    public GameObject soundButOff;
 
-    //set score to be int 100000
+    //public bool colorAssist { get; set; }
+    public bool timerOff { get; set; }
+    public int colorType { get; set; }
+    public int difficultyMode { get; set; }
+    public bool soundOn { get; set; }
+    //public bool vibOn { get; set; }
 
-    //update score per round. maybe in the Update function?
 
-    public static GameManager instance;
 
-    void Awake() //used to access GM from anywhere in the code
+    void Awake()
     {
-        instance = this;
+        Time.timeScale = 1;
     }
-
-    public GameState currentGameState = GameState.menu;
 
     void Start()
     {
-        StartGame();
+        sceneLoad = false;
+        timerOff = false;
+        difficultyMode = 2; //1 is Easy; 2 is Normal; 3 is Hard
+        tapControl = false; // true is hold
+        vibControl = false;
     }
 
-
-    //Start Game
-    public void StartGame()
+    public void TimerStatus() 
     {
-        SetGameState(GameState.inGame);
-    }
+        PlayerPrefs.SetString("enableTimer", timerOff.ToString());
+    } 
 
-    //When player loses, open menu to try again or quit
-    public void GameOver()
+    public void DifficultySetting(int difficultyMode)
     {
-        SetGameState(GameState.gameOver);
-        //
-    }
-
-    //when player goes to the menu?
-    public void BacktoMenu()
-    {
-        SetGameState(GameState.menu);
-    }
-
-    void SetGameState (GameState newGameState)
-    {
-        if (newGameState == GameState.menu)
+        if (difficultyMode == 1) //easy with 0.5 threshold
         {
-            //setup Unity scene for menu state
+            PlayerPrefs.SetFloat("threshold", 0.5f);
+            Debug.Log("Difficulty Mode: Easy");
         }
-        else if (newGameState == GameState.inGame)
+        else if (difficultyMode == 3) //hard with 0.1f threshold
         {
-            //setup Unity scene for inGame state
+            PlayerPrefs.SetFloat("threshold", 0.1f);
+            Debug.Log("Difficulty Mode: Hard");
         }
-        else if (newGameState == GameState.gameOver)
+        else //normal with 0.3f threshold
         {
-            //setup Unity scene for gameOver state
+            PlayerPrefs.SetFloat("threshold", 0.3f);
+            Debug.Log("Difficult Mode: Normal");
         }
+    }
 
-        currentGameState = newGameState;
+    public void ColorSetting()
+    {
+        PlayerPrefs.SetInt("colorType", colorType);
+        //GameObject.FindGameObjectsWithTag("MainCamera").ToList().ForEach(y=>y.GetComponent<Colorblind>().Type = colorType);
+
+        //Camera.main.gameObject.GetComponent<Colorblind>().Type = colorType;        
+    }
+
+    public void VolumeControl()
+    {
+        PlayerPrefs.SetString("enableSound", soundControl.ToString());
+    }
+
+    public void VibrationControl(bool vibControl)
+    {
+        PlayerPrefs.SetString("enableVib", vibControl.ToString());
+    }
+
+    public void SceneLoader(int SceneIndex)
+    {
+        SceneManager.LoadScene(SceneIndex);
+        sceneReloaded = false;
+    }
+
+    public void LoadCurrentScene()
+    {        
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);        
+        //Debug.Log("Scene has been reloaded");
+        sceneLoad = true;
+        sceneReloaded = true;
+        // TODO: if we decided to add more rounds and only want to display each piece once we will need to fix the level picker logic
+        GameObject.Find("GameManager").GetComponent<WinScript>().reloaded = true;
+        //Debug.Log(sceneLoad);
+        Start();
     }
 }
